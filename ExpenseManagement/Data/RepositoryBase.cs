@@ -42,7 +42,7 @@ namespace ExpenseManagement.Data
 
         public void Update(Tentity entity)
         {   
-            _RepositoryContext.Entry<Tentity>.State = EntityState.Modified;
+
             dbSet.Update(entity);
 
         }

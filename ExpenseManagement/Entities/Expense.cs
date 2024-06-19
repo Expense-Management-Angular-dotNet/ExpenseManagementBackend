@@ -13,7 +13,7 @@ namespace ExpenseManagement.Entities
 
 
         public string? UserID { get; set; }
-        [ForeignKey("UserId")]
+        [ForeignKey("UserID")]
         public User User { get; set; }
     }
 }
