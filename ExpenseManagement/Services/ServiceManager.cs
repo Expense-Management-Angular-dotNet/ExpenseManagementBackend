@@ -10,9 +10,9 @@ namespace ExpenseManagement.Services
     {
         private readonly Lazy<IAuthService> _authService;
 
-        public ServiceManager(UserManager<User> userManager, IConfiguration configuration, SignInManager<User> signInManager, IMapper mapper)
+        public ServiceManager(UserManager<User> userManager, IConfiguration configuration, SignInManager<User> signInManager, IMapper mapper, IConfiguration configuration1)
         {
-            _authService = new Lazy<IAuthService>(() => new AuthService.AuthService(userManager, signInManager, mapper));
+            _authService = new Lazy<IAuthService>(() => new AuthService.AuthService(userManager, signInManager, mapper, configuration1));
         }
 
         public IAuthService AuthService => _authService.Value;

@@ -19,7 +19,7 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPost("Create")]
-/*        [Authorize(Roles = "Admin")]*/
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto model)
         {
             
@@ -49,9 +49,9 @@ namespace ExpenseManagement.Controllers
         public async Task<IActionResult> Authenticate([FromBody] LoginDto user)
         {
             if (!await _service.AuthService.LoginAsync(user)) { return Unauthorized(); }
-           
-                
-            return Ok(await _service.AuthService.generateToken());
+
+            var token = await _service.AuthService.generateToken();
+            return Ok(new {token});
         }
     }
 }

@@ -20,11 +20,13 @@ namespace ExpenseManagement.Services.AuthService
         /*        private readonly IConfiguration _configuration1;*/
         private User? _user;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _configuration = configuration;
+             
         }
         public async Task<bool> LoginAsync(LoginDto model)
         {
