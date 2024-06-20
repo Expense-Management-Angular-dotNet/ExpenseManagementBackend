@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ExpenseManagement.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace ExpenseManagement.Entities
 {
@@ -28,6 +29,8 @@ namespace ExpenseManagement.Entities
            .HasOne(sr => sr.User)
            .WithMany(u => u.SalaryRecords)
            .HasForeignKey(sr => sr.UserID);
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
     }
 }

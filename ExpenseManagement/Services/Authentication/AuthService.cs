@@ -46,14 +46,6 @@ namespace ExpenseManagement.Services.AuthService
             var user = _mapper.Map<User>(model);
             user.IsVerified = false;
             user.UserName = model.Name.Replace(" ", "");
-             
-
-            Console.WriteLine($"Id after mapper: {user.Id}");
-            Console.WriteLine($"Name after mapper: {user.UserName}");
-            Console.WriteLine($"Email after mapper: {user.Email}");
-            Console.WriteLine($"Title after mapper: {user.Tittle}");
-            Console.WriteLine($"UserType after mapper: {user.UserType}");
-            Console.WriteLine($"Salary after mapper: {user.Salary}");
 
             var result = await _userManager.CreateAsync(user, model.Password);
             Console.WriteLine($"the restult is: {result.ToString()}");

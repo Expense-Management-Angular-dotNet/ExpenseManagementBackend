@@ -3,6 +3,7 @@ using System;
 using ExpenseManagement.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240619102903_RolesAdded")]
+    partial class RolesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,19 +177,19 @@ namespace ExpenseManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b2d192f7-c0fa-4455-935e-66ac842206ad",
+                            Id = "7abeccbc-b0b0-479f-a7c3-760393981117",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "86cf5901-c61c-4787-93f7-6e5b6c2de2de",
+                            Id = "ada941dd-9508-4017-b362-b5ae363fec8a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "adb94674-3133-41c9-adb0-bdfe59ed8f09",
+                            Id = "4936d661-3d7c-4bf8-8647-a6cfa6349854",
                             Name = "User",
                             NormalizedName = "USER"
                         });
