@@ -76,7 +76,10 @@ namespace ExpenseManagement.Services.AuthService
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.Email)
+/*                new Claim(ClaimTypes.Name, _user.Name),*/
+                new Claim(ClaimTypes.Email, _user.Email),
+                new Claim(ClaimTypes.NameIdentifier, _user.Id)
+/*                new Claim("Tittle", _user.Tittle)*/
 
             };
 

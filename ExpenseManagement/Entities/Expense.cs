@@ -14,6 +14,6 @@ namespace ExpenseManagement.Entities
 
         public string? UserID { get; set; }
         [ForeignKey("UserID")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

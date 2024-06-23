@@ -22,9 +22,9 @@ namespace ExpenseManagement.Data
 
         public IUserRepository UserRepository => _userRepository.Value;
 
-        public void save()
+        public async void save()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
     }
 }

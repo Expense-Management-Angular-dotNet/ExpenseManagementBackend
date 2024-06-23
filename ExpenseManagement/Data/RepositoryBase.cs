@@ -14,7 +14,7 @@ namespace ExpenseManagement.Data
         }
         public void Create(Tentity entity)
         {
-            throw new NotImplementedException();
+            dbSet.Add(entity);
         }
 
         public async void Delete(Tentity entity)
