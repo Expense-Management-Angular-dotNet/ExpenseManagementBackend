@@ -21,6 +21,7 @@ namespace ExpenseManagement.Services.ExpenseServices
         {
             _expense = _mapper.Map<Expense>(expenseDTO);
             _expense.UserID = Userid;
+            _expense.ExpenseID = Guid.NewGuid().ToString();
             Console.WriteLine($"Expense{_expense}");
             if (_expense == null)
             {
