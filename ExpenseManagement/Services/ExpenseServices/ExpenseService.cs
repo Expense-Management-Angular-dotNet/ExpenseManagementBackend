@@ -2,6 +2,7 @@
 using ExpenseManagement.Data;
 using ExpenseManagement.Entities;
 using ExpenseManagement.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Services.ExpenseServices
 {
@@ -37,6 +38,18 @@ namespace ExpenseManagement.Services.ExpenseServices
             catch (Exception ex)
             {
                 throw new Exception("Expense addition failed", ex);
+            }
+        }
+
+        public Task<List<Expense>> GetbyUserID(string userid)
+        {
+            try
+            {
+                return _repository.ExpenseRepository.FindbyUserID(userid);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Expense get failed  {ex.Message}");
             }
         }
     }

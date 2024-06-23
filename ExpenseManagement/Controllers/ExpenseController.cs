@@ -1,5 +1,6 @@
 ﻿using ExpenseManagement.Entities;
 using ExpenseManagement.Services;
+using ExpenseManagement.Services.ExpenseServices;
 using ExpenseManagement.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,36 @@ namespace ExpenseManagement.Controllers
 
             }
 
+        }
+
+        [HttpGet("Get")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> GetByUserID()
+        {
+            try
+            {
+            
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("User ID is missing");
+                }
+
+                var expenses = await _service.ExpenseService.GetbyUserID(userId);
+
+                if (expenses == null || expenses.Count == 0)
+                {
+                    return NotFound("No expenses found for this user");
+                }
+
+                return Ok(expenses);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine( $"An error occurred while retrieving expenses{ex}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 
