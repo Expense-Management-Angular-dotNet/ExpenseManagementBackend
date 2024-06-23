@@ -48,10 +48,30 @@ namespace ExpenseManagement.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] LoginDto user)
         {
-            if (!await _service.AuthService.LoginAsync(user)) { return Unauthorized(); }
+            var (result, activated) = await _service.AuthService.LoginAsync(user);
+            if (!result) { return Unauthorized(); }
+
+            if (!activated)
+            {
+                /*var updatePasswordUrl = "http://localhost:/update-password";
+                Response.Headers["Location"] = updatePasswordUrl;*/
+                return StatusCode(StatusCodes.Status303SeeOther, new { message = "Account is not verified. Please update your password." });//, redirectUrl = updatePasswordUrl });
+            }
 
             var token = await _service.AuthService.generateToken();
             return Ok(new {token});
+        }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDto passwordDto)
+        {
+            var result = await _service.AuthService.UpdatePasswordAsync(passwordDto);
+            if (!result.Succeeded) {
+                return BadRequest(new {errors = result.Errors});
+            }
+
+           
+            return Ok(new { message = "Password is updated" });
         }
     }
 }

@@ -7,8 +7,9 @@ namespace ExpenseManagement.Services.AuthService
     public interface IAuthService
     {
         Task<IdentityResult> RegisterAsync(RegisterDto model);
-        Task<bool> LoginAsync(LoginDto model);
+        Task<(bool, bool)> LoginAsync(LoginDto model);
 
         Task<string> generateToken();
+        public Task<IdentityResult> UpdatePasswordAsync(UpdatePasswordDto model);
     }
 }
