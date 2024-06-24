@@ -9,8 +9,8 @@ namespace ExpenseManagement.Data
         bool trackChanges,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
 
-        Task<TEntity> FindById(string id);
-        //void Create(TEntity entity);
+        Task<TEntity> FindbyID(string id);
+        void Create(TEntity entity);
         void Update(TEntity entity);
 
 

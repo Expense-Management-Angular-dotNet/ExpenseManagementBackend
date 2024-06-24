@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Data.Expenses
 {
-    public class ExpenseRepository : RepositoryBase<Expense>, IExpenseRepository
+    public class ExpenseRepository : RepositoryBase<Expense, ApplicationDbContext>, IExpenseRepository
     {
 
         ApplicationDbContext _context;
-        public ExpenseRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) 
+        public ExpenseRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
             _context = applicationDbContext;
         }
