@@ -12,6 +12,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Name));
 
         CreateMap<UserRequestDto, User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); // Only map non-null values
+        CreateMap<User, UserResponseDto>();
+
         CreateMap<Expense, ExpenseDTO>().ReverseMap();
         CreateMap<ExpenseDTO, Expense>();
         // Add other mappings here

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ExpenseManagement.Entities;
 using ExpenseManagement.Shared;
 using Microsoft.AspNetCore.Identity;
@@ -52,9 +53,9 @@ namespace ExpenseManagement.Services
             {
                 user.UserType = userRequestDto.UserType;
             }
-            if (!string.IsNullOrWhiteSpace(userRequestDto.Tittle))
+            if (!string.IsNullOrWhiteSpace(userRequestDto.Title))
             {
-                user.Tittle = userRequestDto.Tittle;
+                user.Title = userRequestDto.Title;
             }
             if (userRequestDto.Salary.HasValue)
             {
@@ -73,7 +74,7 @@ namespace ExpenseManagement.Services
             return result;
         }
 
-        public async Task<IQueryable<User>> SearchUsersAsync(string? email, string? name, int? salary, string? managerEmail)
+        public async Task<IQueryable<UserResponseDto>> SearchUsersAsync(string? email, string? name, int? salary, string? managerEmail)
         {
             var users = _userManager.Users;
 
@@ -97,7 +98,9 @@ namespace ExpenseManagement.Services
                 users = users.Where(u => u.ManagerEmail == managerEmail);
             }
 
-            return users;
+            IQueryable<UserResponseDto> userDtos = users.ProjectTo<UserResponseDto>(_mapper.ConfigurationProvider);
+
+            return userDtos;
         }
     }
 }

@@ -8,11 +8,13 @@ namespace ExpenseManagement.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IServiceManager _service;
         private readonly UserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IServiceManager service)
         {
-            _userService = userService;
+            _service = service;
+            _userService = _service.UserService;
         }
 
         [HttpPut("update")]

@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ExpenseManagement.Migrations
 {
     /// <inheritdoc />
@@ -31,14 +33,16 @@ namespace ExpenseManagement.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     UserType = table.Column<string>(type: "text", nullable: true),
-                    Tittle = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
                     Salary = table.Column<int>(type: "integer", nullable: true),
                     IsVerified = table.Column<bool>(type: "boolean", nullable: true),
+                    ManagerEmail = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
@@ -199,6 +203,16 @@ namespace ExpenseManagement.Migrations
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "ab5d7478-e8df-4085-a4d2-b48c79c64c2f", null, "User", "USER" },
+                    { "e5cd195a-9ab7-44ed-aed5-0458944ae06f", null, "Manager", "MANAGER" },
+                    { "e77e9423-a21e-48a3-8122-1883c8e3b2b4", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

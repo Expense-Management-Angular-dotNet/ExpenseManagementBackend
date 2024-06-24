@@ -20,7 +20,7 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPost("Create")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto model)
         {
 
