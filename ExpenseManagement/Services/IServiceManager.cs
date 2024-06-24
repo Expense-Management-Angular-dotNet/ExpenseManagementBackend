@@ -7,5 +7,6 @@ namespace ExpenseManagement.Services
     public interface IServiceManager
     {
         IAuthService AuthService { get; }
+        UserService UserService { get; }
     }
 }

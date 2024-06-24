@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace ExpenseManagement.Entities
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-/*        public DbSet<User> Users { get; set; }*/
+        /*        public DbSet<User> Users { get; set; }*/
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<SalaryRecord> SalaryRecords { get; set; }
 

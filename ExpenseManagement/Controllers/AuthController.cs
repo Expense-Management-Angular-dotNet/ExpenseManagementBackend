@@ -13,17 +13,16 @@ namespace ExpenseManagement.Controllers
     {
         private readonly IServiceManager _service;
 
-       
-        public AuthController(IServiceManager service) { 
+
+        public AuthController(IServiceManager service)
+        {
             _service = service;
         }
 
         [HttpPost("Create")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles ="Admin")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto model)
         {
-            
-
 
             if (!ModelState.IsValid)
             {
@@ -36,7 +35,7 @@ namespace ExpenseManagement.Controllers
             {
                 Console.WriteLine("something is not good with the result");
                 foreach (var error in result.Errors)
-                {   
+                {
                     Console.WriteLine($"Error: {error} and code is: {error.Code}");
                     ModelState.TryAddModelError(error.Code, error.Description);
                 }
@@ -51,7 +50,7 @@ namespace ExpenseManagement.Controllers
             if (!await _service.AuthService.LoginAsync(user)) { return Unauthorized(); }
 
             var token = await _service.AuthService.generateToken();
-            return Ok(new {token});
+            return Ok(new { token });
         }
     }
 }

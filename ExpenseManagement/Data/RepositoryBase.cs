@@ -1,52 +1,57 @@
-﻿using ExpenseManagement.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Data
 {
-    public class RepositoryBase<Tentity , Tcontext> : IRepositoryBase<Tentity> where Tentity : class where Tcontext : DbContext
+    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
     {
-        protected Tcontext _RepositoryContext;
-        protected DbSet<Tentity> dbSet;
-        public RepositoryBase(Tcontext context) { 
-            this._RepositoryContext= context;
-            dbSet=_RepositoryContext.Set<Tentity>();
-        }
-        public void Create(Tentity entity)
+        protected DbContext RepositoryContext { get; set; }
+
+        public RepositoryBase(DbContext repositoryContext)
         {
-            throw new NotImplementedException();
+            RepositoryContext = repositoryContext;
         }
 
-        public async void Delete(Tentity entity)
+        public IQueryable<TEntity> FindAll(bool trackChanges)
         {
-              dbSet.Remove(entity);
+            return !trackChanges ?
+                RepositoryContext.Set<TEntity>()
+                    .AsNoTracking() :
+                RepositoryContext.Set<TEntity>();
         }
 
-        public IQueryable<Tentity> FindAll(bool trackChanges)
+        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
-            IQueryable<Tentity> query = dbSet;
-            return query.AsQueryable();
+            IQueryable<TEntity> query = !trackChanges ?
+                RepositoryContext.Set<TEntity>()
+                    .Where(expression)
+                    .AsNoTracking() :
+                RepositoryContext.Set<TEntity>()
+                    .Where(expression);
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
         }
 
-        public IQueryable<Tentity> FindByCondition(Expression<Func<Tentity, bool>> expression, bool trackChanges, Func<IQueryable<Tentity>, IOrderedQueryable<Tentity>> orderBy)
+        public async Task<TEntity> FindById(string id)
         {
-            IQueryable<Tentity> query = dbSet;
-            return query.AsQueryable();
+            return await RepositoryContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async  Task<Tentity> FindbyID(string id)
-        {   
-            return await dbSet.FindAsync(id);
-            
+        public void Delete(TEntity entity)
+        {
+            RepositoryContext.Set<TEntity>().Remove(entity);
         }
 
-        public void Update(Tentity entity)
-        {   
+        //public abstract void Create(TEntity entity);
 
-            dbSet.Update(entity);
-
-        }
-
-        
+        public abstract void Update(TEntity entity);
     }
 }

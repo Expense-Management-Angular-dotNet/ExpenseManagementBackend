@@ -12,7 +12,7 @@ namespace ExpenseManagement.Entities
         public DateTime LastChangedDate { get; set; }
 
         public string? UserID { get; set; }
-        [ForeignKey("UserID")] 
+        [ForeignKey("UserID")]
 
         public User User { get; set; }
     }

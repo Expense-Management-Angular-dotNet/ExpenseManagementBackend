@@ -1,21 +1,21 @@
-﻿using ExpenseManagement.Entities;
-using ExpenseManagement.Shared;
+﻿using ExpenseManagement.Shared;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using ExpenseManagement.Entities;
 
 namespace ExpenseManagement.Services.AuthService
 {
     public class AuthService : IAuthService
     {
-/*        private readonly ILoggerManager _logger;*/
+        /*        private readonly ILoggerManager _logger;*/
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
-/*        private readonly ILogger<AuthService> _logger;*/
+        /*        private readonly ILogger<AuthService> _logger;*/
         private readonly SignInManager<User> _signInManager;
         /*        private readonly IConfiguration _configuration1;*/
         private User? _user;
@@ -26,13 +26,14 @@ namespace ExpenseManagement.Services.AuthService
             _signInManager = signInManager;
             _mapper = mapper;
             _configuration = configuration;
-             
+
         }
         public async Task<bool> LoginAsync(LoginDto model)
         {
-            _user=await _userManager.FindByEmailAsync(model.Email);
+            _user = await _userManager.FindByEmailAsync(model.Email);
             var result = (_user != null && await _userManager.CheckPasswordAsync(_user, model.Password));
-            if (!result) {
+            if (!result)
+            {
                 IdentityError errors = new IdentityError { Description = $"User with email {model.Email} not found." };
                 /*return "Failed";*/
             }
@@ -60,7 +61,8 @@ namespace ExpenseManagement.Services.AuthService
 
         }
 
-        public async Task<string> generateToken() { 
+        public async Task<string> generateToken()
+        {
 
             var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"));
             var secret = new SymmetricSecurityKey(key);
@@ -94,7 +96,7 @@ namespace ExpenseManagement.Services.AuthService
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
 
-           
+
         }
     }
 }

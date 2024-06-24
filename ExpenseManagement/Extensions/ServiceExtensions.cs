@@ -10,9 +10,8 @@ namespace ExpenseManagement.Extensions
 {
     public static class ServiceExtensions
     {
-      
-        public static void ConfigureUnitOfWork(this IServiceCollection services) =>
-                    services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        public static void ConfigureUnitOfWork(this IServiceCollection services) => services.AddScoped<IUnitOfWork, UnitOfWork>();
         public static void ConfigureServices(this IServiceCollection services) =>
              services.AddScoped<IServiceManager, ServiceManager>();
 
@@ -38,8 +37,7 @@ namespace ExpenseManagement.Extensions
 
                     ValidIssuer = jwtSettings["validIssuer"],
                     ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new
-   SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
 

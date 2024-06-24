@@ -2,15 +2,15 @@
 
 namespace ExpenseManagement.Data
 {
-    public interface IRepositoryBase<TEntity> 
+    public interface IRepositoryBase<TEntity>
     {
         IQueryable<TEntity> FindAll(bool trackChanges);
         IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression,
         bool trackChanges,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy );
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
 
-        Task<TEntity> FindbyID(string id);
-        void Create(TEntity entity);
+        Task<TEntity> FindById(string id);
+        //void Create(TEntity entity);
         void Update(TEntity entity);
 
 
