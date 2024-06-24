@@ -1,5 +1,6 @@
 ﻿
 using ExpenseManagement.Services.AuthService;
+using ExpenseManagement.Services.ExpenseServices;
 using Microsoft.AspNetCore.Authentication;
 
 namespace ExpenseManagement.Services
@@ -8,5 +9,6 @@ namespace ExpenseManagement.Services
     {
         IAuthService AuthService { get; }
         UserService UserService { get; }
+        ExpenseService ExpenseService { get; }
     }
 }

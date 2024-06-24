@@ -28,7 +28,7 @@ namespace ExpenseManagement.Services.AuthService
             _configuration = configuration;
 
         }
-        public async Task<bool> LoginAsync(LoginDto model)
+        public async Task<(bool, bool)> LoginAsync(LoginDto model)
         {
             _user = await _userManager.FindByEmailAsync(model.Email);
             var result = (_user != null && await _userManager.CheckPasswordAsync(_user, model.Password));
@@ -37,10 +37,16 @@ namespace ExpenseManagement.Services.AuthService
                 IdentityError errors = new IdentityError { Description = $"User with email {model.Email} not found." };
                 /*return "Failed";*/
             }
+            bool activated=true;
+            if (_user.IsVerified != true)
+            {
+                activated = false;
+            }
+            
             //do generate token
             /*var token = await generateToken();
             return token;*/
-            return result;
+            return (result, activated);
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterDto model)
@@ -72,7 +78,10 @@ namespace ExpenseManagement.Services.AuthService
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.Email)
+/*                new Claim(ClaimTypes.Name, _user.Name),*/
+                new Claim(ClaimTypes.Email, _user.Email),
+                new Claim(ClaimTypes.NameIdentifier, _user.Id)
+/*                new Claim("Tittle", _user.Tittle)*/
 
             };
 
@@ -95,8 +104,27 @@ namespace ExpenseManagement.Services.AuthService
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
+        }
 
+        public async Task<IdentityResult> UpdatePasswordAsync(UpdatePasswordDto passwordDto)
+        {
+            var user = await _userManager.FindByEmailAsync(passwordDto.Email);
+            if(user == null)
+            {
+                return IdentityResult.Failed(new IdentityError{ Description="User not found"});
+            }
 
+            var result = await _userManager.ChangePasswordAsync(user,passwordDto.CurrentPassword, passwordDto.NewPassword);
+            if (result.Succeeded) {
+                user.IsVerified = true;
+                var updatedresult = await _userManager.UpdateAsync(user);
+                if (!updatedresult.Succeeded)
+                {
+                    return IdentityResult.Failed(new IdentityError { Description = "Failed to update user verification status" });
+                    }
+            }
+
+            return result;
         }
     }
 }
