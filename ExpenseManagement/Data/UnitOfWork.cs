@@ -1,8 +1,6 @@
 ﻿using ExpenseManagement.Data.Expenses;
 using ExpenseManagement.Data.Users;
 using ExpenseManagement.Entities;
-using ExpenseManagement.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseManagement.Data
 {
