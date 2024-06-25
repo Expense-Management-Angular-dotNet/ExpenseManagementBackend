@@ -221,7 +221,7 @@ namespace ExpenseManagement.Controllers
                     {
                         return Unauthorized(new { message = "Manager Email is not present in token." });
                     }
-                    var check = await _service.UserService.hasManager(id, managerEmail);
+                    var check = await _service.UserService.hasManager(userId, managerEmail);
                     if (!check)
                     {
                         return Unauthorized(new { message = "Manager does not have access to view this user's data." });

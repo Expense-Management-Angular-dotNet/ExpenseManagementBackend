@@ -13,6 +13,17 @@ namespace ExpenseManagement.Data.Expenses
             _context = applicationDbContext;
         }
 
+        public async Task  DeleteExpenseById(string Id)
+        {
+            var Expense = await _context.Expenses.FindAsync(Id);
+            if (Expense == null)
+            {
+                throw new ArgumentException("Entity not found");
+            }
+
+            _context.Expenses.Remove(Expense);
+        }
+
         public async Task<List<Expense>> FindbyDate(DateTime date)
         {
             return await _context.Expenses.Where(e => e.DateTime.Date == date.Date).ToListAsync();

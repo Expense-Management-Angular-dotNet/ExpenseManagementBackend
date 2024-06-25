@@ -135,6 +135,33 @@ namespace ExpenseManagement.Services.ExpenseServices
             }
         }
 
+        public async Task DeleteExpenseById(string Id)
+        {
+            try
+            {
+                 await _repository.ExpenseRepository.DeleteExpenseById(Id);
+                await _repository.save();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed  {ex.Message}");
+            }
+        }
+
+        public void Delete(Expense expense)
+        {
+            try
+            {
+                _repository.ExpenseRepository.Delete(expense);
+                _repository.save();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed  {ex.Message}");
+            }
+        }
+
+
 
 
 
