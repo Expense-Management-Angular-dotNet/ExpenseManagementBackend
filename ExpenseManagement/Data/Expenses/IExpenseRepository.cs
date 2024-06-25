@@ -13,5 +13,7 @@ namespace ExpenseManagement.Data.Expenses
         public Task<List<Expense>> FindbyDateandUser(DateTime date, string userid);
 
         public Task<List<Expense>> FindbyMonthandUser(int month, string userid);
+
+        public Task DeleteExpenseById(String Id);
     }
 }

@@ -22,7 +22,7 @@ namespace ExpenseManagement.Data
 
         public IUserRepository UserRepository => _userRepository.Value;
 
-        public async void save()
+        public async Task save()
         {
            await _context.SaveChangesAsync();
         }

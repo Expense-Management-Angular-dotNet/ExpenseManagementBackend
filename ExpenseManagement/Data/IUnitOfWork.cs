@@ -8,6 +8,6 @@ namespace ExpenseManagement.Data
         IExpenseRepository ExpenseRepository { get; }
         IUserRepository UserRepository { get; }
 
-        void save();
+        Task save();
     }
 }
