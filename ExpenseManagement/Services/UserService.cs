@@ -30,6 +30,19 @@ namespace ExpenseManagement.Services
             return _user;
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            var _user = await _userManager.FindByEmailAsync(email);
+            return _user;
+        }
+
+        public async Task<User> GetUserByIdAsync(string id)
+        {
+            var _user = await _userManager.FindByIdAsync(id);
+            return _user;
+        }
+
+
         public async Task<IdentityResult> UpdateUserAsync(UserRequestDto userRequestDto)
         {
             var user = await _userManager.FindByEmailAsync(userRequestDto.Email);

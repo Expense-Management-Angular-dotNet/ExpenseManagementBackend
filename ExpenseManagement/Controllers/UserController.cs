@@ -25,6 +25,7 @@ namespace ExpenseManagement.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
         {
+            Console.WriteLine("--------------------------entered");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -33,17 +34,29 @@ namespace ExpenseManagement.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
-            Console.WriteLine($"User ID: {userId}");
-            Console.WriteLine($"User Email: {userEmail}");
+            var user = await _userService.GetUserByIdAsync(userId);
+            Console.WriteLine($"--------------------------userId : {userId}");
+            Console.WriteLine($"--------------------------userEmail : {userEmail}");
 
-            var result = await _userService.UpdateUserAsync(userRequestDto);
-
-            if (result.Succeeded)
+            if (user.UserType == "Admin" || user.Email == userRequestDto.Email)
             {
-                return Ok("User updated successfully");
+                Console.WriteLine("--------------------------authorized");
+
+                var result = await _userService.UpdateUserAsync(userRequestDto);
+
+                if (result.Succeeded)
+                {
+                    return Ok("user updated successfully");
+                }
+
+                return BadRequest(result.Errors);
+            }
+            else
+            {
+                Console.WriteLine("--------------------------unauthorized");
+                return Unauthorized();
             }
 
-            return BadRequest(result.Errors);
         }
 
 
