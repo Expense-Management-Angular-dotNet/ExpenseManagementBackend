@@ -22,7 +22,7 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPut("update")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AdminOrSelf")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
         {
             if (!ModelState.IsValid)
