@@ -40,11 +40,6 @@ namespace ExpenseManagement.Services
             }
 
             // Map only non-null properties from UserRequestDto to ApplicationUser
-            if (!string.IsNullOrWhiteSpace(userRequestDto.Email))
-            {
-                user.Email = userRequestDto.Email;
-                user.UserName = userRequestDto.Email; // Assuming username is the email
-            }
             if (!string.IsNullOrWhiteSpace(userRequestDto.Name))
             {
                 user.Name = userRequestDto.Name;

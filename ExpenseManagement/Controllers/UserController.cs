@@ -1,6 +1,10 @@
 ﻿using ExpenseManagement.Services;
 using ExpenseManagement.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ExpenseManagement.Controllers
 {
@@ -18,12 +22,19 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPut("update")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AdminOrSelf")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            Console.WriteLine($"User ID: {userId}");
+            Console.WriteLine($"User Email: {userEmail}");
 
             var result = await _userService.UpdateUserAsync(userRequestDto);
 
@@ -34,6 +45,7 @@ namespace ExpenseManagement.Controllers
 
             return BadRequest(result.Errors);
         }
+
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchUsers([FromQuery] string? email, [FromQuery] string? name, [FromQuery] int? salary, [FromQuery] string? managerEmail)
