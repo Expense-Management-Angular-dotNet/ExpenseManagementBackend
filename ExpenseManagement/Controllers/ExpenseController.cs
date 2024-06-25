@@ -52,19 +52,35 @@ namespace ExpenseManagement.Controllers
 
         [HttpGet("Get")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> GetByUserID()
+        public async Task<IActionResult> GetByUserID([FromQuery] DateTime? date, [FromQuery] bool? month)
         {
             try
             {
             
-                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (string.IsNullOrEmpty(userId))
                 {
                     return Unauthorized("User ID is missing");
                 }
+                List<Expense> expenses;
+                expenses = await _service.ExpenseService.GetbyUserID(userId);
+                if (month.HasValue && month.Value)
+                {
+                    if (date != null)
+                    {
+                        expenses = await _service.ExpenseService.GetbyUserIdAndMonth(date.Value, userId);
+                    }
+                    else
+                    {
+                        return BadRequest("Month is not specified");
+                    }
+                }
+                else if (date.HasValue)
+                {
+                    expenses = await _service.ExpenseService.GetbyUserIdAndDate(date.Value, userId);
+                }
 
-                var expenses = await _service.ExpenseService.GetbyUserID(userId);
 
                 if (expenses == null || expenses.Count == 0)
                 {
@@ -109,7 +125,6 @@ namespace ExpenseManagement.Controllers
         }
 
 
-        //!!!!!!!!!!************Under construction**********!!!!!!!!!!!
         [HttpGet("Get/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin , Manager")]
         public async Task<IActionResult> GetByUserIDbyAdmin(string id)
@@ -121,6 +136,21 @@ namespace ExpenseManagement.Controllers
                 if (string.IsNullOrEmpty(userId))
                 {
                     return Unauthorized("User ID is missing");
+                }
+
+                if (User.IsInRole("Manager"))
+                {
+                    string? managerEmail = User.FindFirstValue(ClaimTypes.Email);
+                    if (managerEmail == null)
+                    {
+                        return Unauthorized(new { message = "Manager Email is not present in token." });
+                    }
+                    var check = await _service.UserService.hasManager(id, managerEmail);
+                    if ( !check )
+                    {
+                        return Unauthorized(new { message = "Manager does not have access to view this user's data." });
+                    }
+
                 }
 
                 var expenses = await _service.ExpenseService.GetbyUserID(userId);
@@ -141,14 +171,23 @@ namespace ExpenseManagement.Controllers
 
         [HttpGet("GetbyDate")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
-        public async Task<IActionResult> GetByDate([FromQuery] DateTime date)
+        public async Task<IActionResult> GetByDate([FromQuery] DateTime date, bool? month)
         {
             try
             {
 
-               
+                List<Expense> expenses;
 
-                var expenses = await _service.ExpenseService.GetbyDate(date);
+
+                if (month != null && month.Value)
+                {
+                     expenses = await _service.ExpenseService.GetbyMonth(date);
+                }
+                else
+                {
+                     expenses = await _service.ExpenseService.GetbyDate(date);
+                }
+                
 
                 if (expenses == null || expenses.Count == 0)
                 {
@@ -165,8 +204,8 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpGet("GetbyDate/{userId}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
-        public async Task<IActionResult> GetByDate([FromQuery] DateTime date, string userId)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin , Manager")]
+        public async Task<IActionResult> GetByDate([FromQuery] DateTime date, string userId, bool? month)
         {
             try
             {
@@ -175,8 +214,33 @@ namespace ExpenseManagement.Controllers
                     return Unauthorized("User ID is missing");
                 }
 
+                if (User.IsInRole("Manager"))
+                {
+                    string? managerEmail = User.FindFirstValue(ClaimTypes.Email);
+                    if (managerEmail == null)
+                    {
+                        return Unauthorized(new { message = "Manager Email is not present in token." });
+                    }
+                    var check = await _service.UserService.hasManager(id, managerEmail);
+                    if (!check)
+                    {
+                        return Unauthorized(new { message = "Manager does not have access to view this user's data." });
+                    }
 
-                var expenses = await _service.ExpenseService.GetbyUserIdAndDate(date, userId);
+                }
+
+                List<Expense> expenses;
+
+
+                if (month != null && month.Value)
+                {
+                    expenses = await _service.ExpenseService.GetbyUserIdAndMonth(date, userId);
+                }
+                else
+                {
+                    expenses = await _service.ExpenseService.GetbyUserIdAndDate(date, userId);
+                }
+
 
                 if (expenses == null || expenses.Count == 0)
                 {
@@ -192,56 +256,7 @@ namespace ExpenseManagement.Controllers
             }
         }
 
-        [HttpGet("GetbyMonth")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
-        public async Task<IActionResult> GetByMonth([FromQuery] DateTime date)
-        {
-            try
-            {
-                var expenses = await _service.ExpenseService.GetbyMonth(date);
-
-                if (expenses == null || expenses.Count == 0)
-                {
-                    return NotFound("No expenses found for this Date");
-                }
-
-                return Ok(expenses);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while retrieving expenses{ex}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        [HttpGet("GetbyMonth/{userId}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
-        public async Task<IActionResult> GetbyMonth([FromQuery] DateTime date, string userId)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Unauthorized("User ID is missing");
-                }
-
-
-                var expenses = await _service.ExpenseService.GetbyUserIdAndMonth(date, userId);
-
-                if (expenses == null || expenses.Count == 0)
-                {
-                    return NotFound("No expenses found for this Date");
-                }
-
-                return Ok(expenses);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while retrieving expenses{ex}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
+        
 
     }
 }

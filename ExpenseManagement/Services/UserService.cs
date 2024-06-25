@@ -110,5 +110,27 @@ namespace ExpenseManagement.Services
 
             return userDtos;
         }
+
+
+        public async Task<bool> hasManager(string email, string userId)
+        {
+            User? user = await _userManager.FindByIdAsync(userId);
+            if(userId == null || email == null)
+            {
+                throw new ArgumentNullException(nameof(email), nameof(userId));
+            }
+            if (user == null)
+            {
+                IdentityError errors = new IdentityError { Description = $"User with UserId {userId} not found." };
+            }
+            if (user.ManagerEmail == email)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
