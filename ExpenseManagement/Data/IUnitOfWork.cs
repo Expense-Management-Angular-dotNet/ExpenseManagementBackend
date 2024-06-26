@@ -1,4 +1,5 @@
 ﻿using ExpenseManagement.Data.Expenses;
+using ExpenseManagement.Data.Salaries;
 using ExpenseManagement.Data.Users;
 
 namespace ExpenseManagement.Data
@@ -7,6 +8,7 @@ namespace ExpenseManagement.Data
     {
         IExpenseRepository ExpenseRepository { get; }
         IUserRepository UserRepository { get; }
+        ISalaryRepository SalaryRepository { get; }
 
         Task save();
     }

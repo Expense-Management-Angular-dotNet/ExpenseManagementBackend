@@ -1,7 +1,5 @@
 ﻿using ExpenseManagement.Services;
-using ExpenseManagement.Services.AuthService;
 using ExpenseManagement.Shared;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

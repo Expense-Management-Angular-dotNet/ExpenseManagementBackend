@@ -3,6 +3,7 @@ using System;
 using ExpenseManagement.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240625080916_changed salary column name")]
+    partial class changedsalarycolumnname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace ExpenseManagement.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime>("LastChangedDate")
+                    b.Property<DateTime>("ForTheMonth")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserID")
@@ -95,19 +98,19 @@ namespace ExpenseManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aeb4c1ec-12c1-47f8-b2f2-5156d2033dc9",
+                            Id = "cc3140d9-ea2d-4f10-b7c5-12d30372ca10",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "2624f47c-572b-4849-95c9-c6188ec6173e",
+                            Id = "471d44e7-e8f4-4c11-8216-9f9a43bdea3e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8e46ec41-e9dd-40c4-93c8-e4fff903d0f2",
+                            Id = "e4ee6cd8-ab12-4aed-9d14-285174891e6f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
