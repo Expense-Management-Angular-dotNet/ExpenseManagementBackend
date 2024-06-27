@@ -13,6 +13,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(Configuration.GetConnectionString("DatabaseConnectionString"))
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOriginPolicy",
+        builder => builder
+            .AllowAnyOrigin() // Allow any origin
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.ConfigureUnitOfWork();
@@ -40,5 +49,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowAnyOriginPolicy");
 
 app.Run();
