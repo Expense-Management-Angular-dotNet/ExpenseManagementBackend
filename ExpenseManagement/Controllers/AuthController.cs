@@ -20,7 +20,7 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPost("Create")]
-        //[Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Admin")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterDto model)
         {
 
@@ -47,6 +47,7 @@ namespace ExpenseManagement.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] LoginDto user)
         {
+
             var (result, activated) = await _service.AuthService.LoginAsync(user);
             if (!result) { return Unauthorized(); }
 
