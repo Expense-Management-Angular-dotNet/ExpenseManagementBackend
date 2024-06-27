@@ -68,8 +68,8 @@ namespace ExpenseManagement.Extensions
                     policy.RequireAssertion(context =>
                     {
                         var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                        Console.WriteLine("Resource found: ", context.Resource);
-                        Console.WriteLine("User Id claim found in jwt: ", userIdClaim);
+                        Console.WriteLine($"Resource found: {context.Resource}");
+                        Console.WriteLine($"User Id claim found in jwt: {userIdClaim}");
                         if (userIdClaim == null)
                         {
                             Console.WriteLine("Found nothing");
@@ -78,7 +78,7 @@ namespace ExpenseManagement.Extensions
 
                         var isAdmin = context.User.IsInRole("Admin");
                         var isSelf = context.Resource is UserRequestDto userRequestDto && userRequestDto.Id == userIdClaim;
-
+                        Console.WriteLine($"isAdmin: {isAdmin}\n isSelf: {isSelf}");
                         return isAdmin || isSelf;
                     });
                 });

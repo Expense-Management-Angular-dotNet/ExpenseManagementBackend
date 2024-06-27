@@ -90,6 +90,8 @@ namespace ExpenseManagement.Controllers
 
                 if (user.UserType == "Admin" || user.Id == salaryDto.UserID)
                 {
+                    var isAdmin = User.IsInRole("Admin");
+                    Console.WriteLine($"Found role : {isAdmin}");
                     return Ok(salaryDto);
 
                 }
