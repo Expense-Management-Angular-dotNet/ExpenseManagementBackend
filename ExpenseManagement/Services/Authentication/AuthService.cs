@@ -104,7 +104,6 @@ namespace ExpenseManagement.Services.AuthService
             Console.WriteLine($"Found roles: {String.Join(", ", roles)}.");
             foreach (var role in roles)
             {
-                Console.WriteLine($"Found role: {role}");
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 

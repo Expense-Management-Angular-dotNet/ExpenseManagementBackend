@@ -22,7 +22,7 @@ namespace ExpenseManagement.Controllers
         }
 
         [HttpPut("update")]
-        [Authorize(AuthenticationSchemes = "Bearer", Policy = "AdminOrSelf")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
         {
             Console.WriteLine("--------------------------entered");
@@ -31,15 +31,15 @@ namespace ExpenseManagement.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
-            //var user = await _userService.GetUserByIdAsync(userId);
-            //Console.WriteLine($"--------------------------userId : {userId}");
-            //Console.WriteLine($"--------------------------userEmail : {userEmail}");
+            var user = await _userService.GetUserByIdAsync(userId);
+            Console.WriteLine($"--------------------------userId : {userId}");
+            Console.WriteLine($"--------------------------userEmail : {userEmail}");
 
-            //if (user.UserType == "Admin" || user.Email == userRequestDto.Email)
-            //{
+            if (user.UserType == "Admin" || user.Email == userRequestDto.Email)
+            {
                 Console.WriteLine("--------------------------authorized");
 
                 var result = await _userService.UpdateUserAsync(userRequestDto);
@@ -50,12 +50,12 @@ namespace ExpenseManagement.Controllers
                 }
 
                 return BadRequest(result.Errors);
-            //}
-            //else
-            //{
-            //    Console.WriteLine("--------------------------unauthorized");
-            //    return Unauthorized();
-            //}
+            }
+            else
+            {
+                Console.WriteLine("--------------------------unauthorized");
+                return Unauthorized();
+            }
 
         }
 
