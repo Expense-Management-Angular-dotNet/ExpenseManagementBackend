@@ -45,6 +45,7 @@ namespace ExpenseManagement.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate([FromBody] LoginDto user)
         {
+
             var (result, activated) = await _service.AuthService.LoginAsync(user);
             if (!result) { return Unauthorized(); }
 
