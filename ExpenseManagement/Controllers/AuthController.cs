@@ -2,6 +2,7 @@
 using ExpenseManagement.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ExpenseManagement.Controllers
 {
@@ -71,5 +72,30 @@ namespace ExpenseManagement.Controllers
            
             return Ok(new { message = "Password is updated" });
         }
+
+        [HttpPost("isAuthenticated")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> IsAuthenticated()
+        {
+            // Retrieve the user claims
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var name = User.FindFirst(ClaimTypes.Name)?.Value;
+            var title = User.FindFirst("Title")?.Value;
+            var userType = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            // Return the extracted information as an object
+            var userInfo = new
+            {
+                UserId = userId,
+                Email = email,
+                Name = name,
+                Title = title,
+                UserType = userType
+            };
+
+            return Ok(userInfo);
+        }
+
     }
 }

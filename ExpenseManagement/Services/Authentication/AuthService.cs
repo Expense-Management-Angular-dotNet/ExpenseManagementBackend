@@ -91,21 +91,21 @@ namespace ExpenseManagement.Services.AuthService
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, _user.Id),
-                new Claim(ClaimTypes.Email, _user.Email),
-                new Claim(ClaimTypes.Name, _user.Name ?? ""),
-                new Claim("Title", _user.Title ?? ""),
-                new Claim(ClaimTypes.Role, _user.UserType)
+                new(ClaimTypes.NameIdentifier, _user.Id),
+                new(ClaimTypes.Email, _user.Email),
+                new(ClaimTypes.Name, _user.Name ?? ""),
+                new("Title", _user.Title ?? ""),
+                new(ClaimTypes.Role, _user.UserType)
             };
 
 
             var roles = await _userManager.GetRolesAsync(_user);
 
             Console.WriteLine($"Found roles: {String.Join(", ", roles)}.");
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role));
+            //}
 
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var tokenOptions = new JwtSecurityToken
